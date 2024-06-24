@@ -2,115 +2,44 @@
     <HeroComponent />
     <div class="contentsection contemplete clear">
         <div class="maincontent clear">
-            <div class="samepost clear">
-                <h2><a href="">Our post title here</a></h2>
-                <h4>April 10, 2016, 12:30 PM, By <a href="#">Delowar</a></h4>
-                <a href="#"><img src="images/post1.jpg" alt="post image" /></a>
-                <p>
-                    Some text will be go here. Some text will be go here.Some text will be go here.Some text will be go
-                    here.Some text will be go here.Some text will be go here.Some text will be go here.Some text will be
-                    go here.Some text will be go here.Some text will be go here. Some text will be go here.Some text
-                    will be go here.Some text will be go here.Some text will be go here.Some text will be go here.Some
-                    text will be go here.Some text will be go here.Some text will be go here.
-                </p>
+            <div class="samepost clear" v-for="(item, index) in posts" :key="index">
+                <h2><a href="#">{{ item.title }}</a></h2>
+                <h4>{{ item.date }}, By <a href="#">{{ item.author }}</a></h4>
+                <a href="#"><img :src="item.img" alt="post image" /></a>
+                <p>{{ item.desccription }}</p>
                 <div class="readmore clear">
                     <a href="post.html">Read More</a>
                 </div>
-            </div>
-            <div class="samepost clear">
-                <h2><a href="">Our post title here</a></h2>
-                <h4>April 10, 2016, 12:30 PM, By <a href="#">Delowar</a></h4>
-                <img src="images/post2.png" alt="post image" />
-                <p>
-                    Some text will be go here. Some text will be go here.Some text will be go here.Some text will be go
-                    here.Some text will be go here.Some text will be go here.Some text will be go here.Some text will be
-                    go here.Some text will be go here.Some text will be go here. Some text will be go here.Some text
-                    will be go here.Some text will be go here.Some text will be go here.Some text will be go here.Some
-                    text will be go here.Some text will be go here.Some text will be go here.
-                </p>
-                <div class="readmore clear">
-                    <a href="post.html">Read More</a>
-                </div>
-            </div>
-            <div class="samepost clear">
-                <h2>Our post title here</h2>
-                <h4>April 10, 2016, 12:30 PM, By <a href="#">Delowar</a></h4>
-                <img src="images/post1.jpg" alt="post image" />
-                <p>
-                    Some text will be go here. Some text will be go here.Some text will be go here.Some text will be go
-                    here.Some text will be go here.Some text will be go here.Some text will be go here.Some text will be
-                    go here.Some text will be go here.Some text will be go here. Some text will be go here.Some text
-                    will be go here.Some text will be go here.Some text will be go here.Some text will be go here.Some
-                    text will be go here.Some text will be go here.Some text will be go here.
-                </p>
-                <div class="readmore clear">
-                    <a href="post.html">Read More</a>
-                </div>
-            </div>
-            <div class="freagmention">
-                <ul>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                </ul>
-            </div><!-- /.freagmention -->
-        </div>
-        <div class="sidebar clear">
-            <div class="samesidebar clear">
-                <h2>Categories</h2>
-                <ul>
-                    <li><a href="#">Category One</a></li>
-                    <li><a href="#">Category Two</a></li>
-                    <li><a href="#">Category Three</a></li>
-                    <li><a href="#">Category Four</a></li>
-                    <li><a href="#">Category Five</a></li>
-                </ul>
-            </div>
-            <div class="samesidebar clear">
-                <h2>Latest articles</h2>
-                <div class="popular clear">
-                    <h3><a href="#">Post title will be go here..</a></h3>
-                    <a href="#"><img src="images/post1.jpg" alt="post image" /></a>
-                    <p>Sidebar text will be go here.Sidebar text will be go here.Sidebar text will be go here.Sidebar
-                        text will be go here.</p>
-                </div>
-
-                <div class="popular clear">
-                    <h3><a href="#">Post title will be go here..</a></h3>
-                    <a href="#"><img src="images/post1.jpg" alt="post image" /></a>
-                    <p>Sidebar text will be go here.Sidebar text will be go here.Sidebar text will be go here.Sidebar
-                        text will be go here.</p>
-                </div>
-
-                <div class="popular clear">
-                    <h3><a href="#">Post title will be go here..</a></h3>
-                    <a href="#"><img src="images/post1.jpg" alt="post image" /></a>
-                    <p>Sidebar text will be go here.Sidebar text will be go here.Sidebar text will be go here.Sidebar
-                        text will be go here.</p>
-                </div>
-
-                <div class="popular clear">
-                    <h3><a href="#">Post title will be go here..</a></h3>
-                    <a href="#"><img src="images/post1.jpg" alt="post image" /></a>
-                    <p>Sidebar text will be go here.Sidebar text will be go here.Sidebar text will be go here.Sidebar
-                        text will be go here.</p>
-                </div>
-
             </div>
         </div>
+        <Sidebar />
     </div>
 </template>
 
 <script>
 import HeroComponent from "../components/HeroComponent.vue";
+import Sidebar from "../components/Sidebar.vue";
+import axios from 'axios';
 
 export default {
     name: 'HomeView',
     components: {
         HeroComponent,
+        Sidebar
     },
-
+    data() {
+        return {
+            posts: []
+        }
+    },
+    mounted() {
+        axios.get('http://localhost/blog-website/src/Api/Api.php?action=select')
+            .then(response => {
+                this.posts = response.data.user_data;
+            })
+            .catch(error => {
+                console.error('There was an error making the GET request!', error);
+            });
+    },
 }
 </script>
