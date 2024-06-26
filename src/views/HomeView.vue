@@ -3,12 +3,12 @@
     <div class="contentsection contemplete clear">
         <div class="maincontent clear">
             <div class="samepost clear" v-for="(item, index) in posts" :key="index">
-                <h2><a href="#">{{ item.title }}</a></h2>
-                <h4>{{ item.date }}, By <a href="#">{{ item.author }}</a></h4>
+                <h2><router-link :to="{name:'signlepage',params:{ id: item.id }}">{{ item.title }}</router-link></h2>
+                <h4>{{ dateformate(item.date) }}, By <a href="#">{{ item.author }}</a></h4>
                 <a href="#"><img :src="item.img" alt="post image" /></a>
-                <p>{{ item.desccription }}</p>
+                <p>{{ truncateText( item.desccription,50) }}</p>
                 <div class="readmore clear">
-                    <a href="post.html">Read More</a>
+                    <router-link :to="{name:'signlepage',params:{ id: item.id }}">Read More</router-link>
                 </div>
             </div>
             <div class="freagmention">
@@ -27,6 +27,7 @@
 import HeroComponent from "../components/HeroComponent.vue";
 import Sidebar from "../components/Sidebar.vue";
 import axios from 'axios';
+import { format } from 'date-fns';
 
 export default {
     name: 'HomeView',
@@ -49,14 +50,31 @@ export default {
         fetchPosts(page) {
             axios.get(`http://localhost/blog-website/src/Api/Api.php?action=select&page=${page}&limit=${this.limit}`)
             .then(response => {
-                this.posts = response.data.user_data;
-                this.totalpage = Math.ceil( response.data.total_posts  / this.limit );
-                this.currrentpage = page;
+                if (response.status == 200 ) {
+                    this.posts = response.data.user_data;
+                    this.totalpage = Math.ceil( response.data.total_posts  / this.limit );
+                    this.currrentpage = page;
+                } else {
+                    console.error('server error', error);
+                }
+                
             })
             .catch(error => {
                 console.error('There was an error making the GET request!', error);
             });
+        },
+        truncateText(word,wordlimt){
+            let words = word.split(' ');
+            if (words >= wordlimt) {
+                return word;
+            }
+            return words.slice(0,wordlimt).join(' ')+'...';
+            
+        },
+        dateformate(date){
+            return format(new Date(date), 'PPP');
         }
+
     },
 }
 </script>

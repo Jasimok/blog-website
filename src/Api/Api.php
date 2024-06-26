@@ -33,8 +33,21 @@ if ($action == 'select') {
     }
 
 }
-else {
+else if ($action == 'selectById') {
+    $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+    $query = "SELECT * FROM `posts` WHERE id = $id";
+    $result = $db->select($query);
+    if ($result) {
+        $post = $result->fetch_assoc();
+        $res['post'] = $post;
+    } else {
+        $res['message'] = "Post Not Found!";
+    }
+} else {
     echo json_encode(['error' => 'Invalid action', 'action_received' => $action]);
 }
+// single page
+
 echo json_encode($res);
 ?>

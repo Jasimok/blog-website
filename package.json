@@ -10,6 +10,7 @@
     "@types/nivo-slider": "^3.2.5",
     "axios": "^1.7.2",
     "core-js": "^3.8.3",
+    "date-fns": "^3.6.0",
     "jquery": "^3.7.1",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"
