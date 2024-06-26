@@ -11,6 +11,13 @@
                     <a href="post.html">Read More</a>
                 </div>
             </div>
+            <div class="freagmention">
+                <ul>
+                    <li v-for="page in totalpage" :key="page">
+                        <a href="#" @click.prevent="fetchPosts(page)">{{ page }}</a>
+                    </li>
+                </ul>
+            </div>
         </div>
         <Sidebar />
     </div>
@@ -29,17 +36,27 @@ export default {
     },
     data() {
         return {
-            posts: []
+            posts: [],
+            totalpage:1,
+            limit:3,
+            currrentpage:1
         }
     },
     mounted() {
-        axios.get('http://localhost/blog-website/src/Api/Api.php?action=select')
+        this.fetchPosts(this.currrentpage);
+    },
+    methods: {
+        fetchPosts(page) {
+            axios.get(`http://localhost/blog-website/src/Api/Api.php?action=select&page=${page}&limit=${this.limit}`)
             .then(response => {
                 this.posts = response.data.user_data;
+                this.totalpage = Math.ceil( response.data.total_posts  / this.limit );
+                this.currrentpage = page;
             })
             .catch(error => {
                 console.error('There was an error making the GET request!', error);
             });
+        }
     },
 }
 </script>
