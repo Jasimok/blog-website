@@ -7,17 +7,20 @@
 				<img :src="posts.img" alt="MyImage"/>
 				<p>{{ posts.desccription }}</p>
 	        </div>
-
 		</div>
+        <Sidebar />
 		
 	</div>
 </template>
 
 <script>
 import axios from 'axios';
-
+import Sidebar from "../components/Sidebar.vue";
     export default {
         name:'SinglePage',
+        components: {
+            Sidebar
+        },
         props:['id'],
         data() {
             return {

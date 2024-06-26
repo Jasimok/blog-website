@@ -3,41 +3,15 @@
         <div class="samesidebar clear">
             <h2>Categories</h2>
             <ul>
-                <li><a href="#">Category One</a></li>
-                <li><a href="#">Category Two</a></li>
-                <li><a href="#">Category Three</a></li>
-                <li><a href="#">Category Four</a></li>
-                <li><a href="#">Category Five</a></li>
+                <li v-for="(cat, index) in cats" :key="index"><router-link :to="{name:'catepage', params:{id:cat.id}}">{{ cat.cat }}</router-link></li>
             </ul>
         </div>
         <div class="samesidebar clear">
             <h2>Latest articles</h2>
-            <div class="popular clear">
-                <h3><a href="#">Post title will be go here..</a></h3>
-                <a href="#"><img src="images/post1.jpg" alt="post image" /></a>
-                <p>Sidebar text will be go here.Sidebar text will be go here.Sidebar text will be go here.Sidebar
-                    text will be go here.</p>
-            </div>
-
-            <div class="popular clear">
-                <h3><a href="#">Post title will be go here..</a></h3>
-                <a href="#"><img src="images/post1.jpg" alt="post image" /></a>
-                <p>Sidebar text will be go here.Sidebar text will be go here.Sidebar text will be go here.Sidebar
-                    text will be go here.</p>
-            </div>
-
-            <div class="popular clear">
-                <h3><a href="#">Post title will be go here..</a></h3>
-                <a href="#"><img src="images/post1.jpg" alt="post image" /></a>
-                <p>Sidebar text will be go here.Sidebar text will be go here.Sidebar text will be go here.Sidebar
-                    text will be go here.</p>
-            </div>
-
-            <div class="popular clear">
-                <h3><a href="#">Post title will be go here..</a></h3>
-                <a href="#"><img src="images/post1.jpg" alt="post image" /></a>
-                <p>Sidebar text will be go here.Sidebar text will be go here.Sidebar text will be go here.Sidebar
-                    text will be go here.</p>
+            <div class="popular clear" v-for="(item, index) in related" :key="index">
+                <h2><router-link :to="{name:'signlepage',params:{ id: item.id }}">{{ item.title }}</router-link></h2>
+                <a href="#"><img :src="item.img" alt="post image" /></a>
+                <p>{{ truncateText( item.desccription,50) }}</p>
             </div>
 
         </div>
@@ -45,8 +19,60 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
-    name:'Sidebar'
+    name:'Sidebar',
+    data() {
+        return {
+            cats:[],
+            related:[]
+        }
+    },
+    mounted(){
+        this.getcategory();
+        this.getrelatedpost();
+
+    },
+    methods: {
+        getcategory() {
+            axios.get(`http://localhost/blog-website/src/Api/Api.php?action=category`)
+            .then(response => {
+                if (response.status == 200 ) {
+                    this.cats = response.data.user_cat;
+                   
+                } else {
+                    console.error('server error', error);
+                }
+                
+            })
+            .catch(error => {
+                console.error('There was an error making the GET request!', error);
+            });
+        },
+        getrelatedpost() {
+            axios.get(`http://localhost/blog-website/src/Api/Api.php?action=related`)
+            .then(response => {
+                if (response.status == 200 ) {
+                    this.related = response.data.user_rel;
+                   
+                } else {
+                    console.error('server error', error);
+                }
+                
+            })
+            .catch(error => {
+                console.error('There was an error making the GET request!', error);
+            });
+        },
+        truncateText(word,wordlimt){
+            let words = word.split(' ');
+            if (words >= wordlimt) {
+                return word;
+            }
+            return words.slice(0,wordlimt).join(' ')+'...';
+            
+        },
+    },
 }
 </script>
 

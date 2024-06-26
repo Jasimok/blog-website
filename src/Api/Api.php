@@ -44,10 +44,34 @@ else if ($action == 'selectById') {
     } else {
         $res['message'] = "Post Not Found!";
     }
+} else if ( $action == 'category' ) {
+    $query = "SELECT * FROM `category` ORDER BY id DESC";
+    $results = $db->select($query);
+    $userdata = [];
+    if ($results) {
+        while ($row = $results->fetch_assoc()) {
+            array_push($userdata, $row);
+        }
+        $res['user_cat'] = $userdata;
+    } else {
+        $res['message'] = "No Data Found!";
+    }
+}else if ( $action == 'related' ) {
+    $query = "SELECT * FROM `posts` ORDER BY id DESC LIMIT 3";
+    $results = $db->select($query);
+    $userdata = [];
+    if ($results) {
+        while ($row = $results->fetch_assoc()) {
+            array_push($userdata, $row);
+        }
+        $res['user_rel'] = $userdata;
+    } else {
+        $res['message'] = "No Data Found!";
+    }
 } else {
     echo json_encode(['error' => 'Invalid action', 'action_received' => $action]);
 }
-// single page
+
 
 echo json_encode($res);
 ?>

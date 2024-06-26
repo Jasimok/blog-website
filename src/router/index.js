@@ -25,6 +25,12 @@ const routes = [
     name:'signlepage',
     component:SinglePage,
     props:true
+  },
+  {
+    path:'/category/:id',
+    name:'catepage',
+    component:HomeView,
+    props:true
   }
 ]
 
