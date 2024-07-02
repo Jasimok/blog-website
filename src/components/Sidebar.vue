@@ -22,6 +22,7 @@
 import axios from 'axios';
 export default {
     name:'Sidebar',
+    props:['id'],
     data() {
         return {
             cats:[],
@@ -31,7 +32,6 @@ export default {
     mounted(){
         this.getcategory();
         this.getrelatedpost();
-
     },
     methods: {
         getcategory() {
@@ -71,7 +71,8 @@ export default {
             }
             return words.slice(0,wordlimt).join(' ')+'...';
             
-        },
+        }
+
     },
 }
 </script>

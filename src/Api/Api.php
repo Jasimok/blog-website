@@ -68,6 +68,12 @@ else if ($action == 'selectById') {
     } else {
         $res['message'] = "No Data Found!";
     }
+} else if($action == 'login') {
+    $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
+    $fname = isset($_POST['lname']) ? $_POST['lname'] : '';
+    $fname = isset($_POST['email']) ? $_POST['email'] : '';
+    $fname = isset($_POST['message']) ? $_POST['message'] : '';
+    $query = 
 } else {
     echo json_encode(['error' => 'Invalid action', 'action_received' => $action]);
 }
